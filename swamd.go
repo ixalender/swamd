@@ -30,6 +30,13 @@ func ParseGoFile(filePath, outputFileName string) {
 		return
 	}
 
+	outputFile, err := os.OpenFile(outputFileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Printf("Error opening output file %s: %s\n", outputFileName, err)
+		return
+	}
+	defer outputFile.Close()
+
 	var annotatedComments []SwagAnnotationComment
 	for _, commentGroup := range fileAst.Comments {
 		for _, comment := range commentGroup.List {
@@ -38,21 +45,16 @@ func ParseGoFile(filePath, outputFileName string) {
 				annotatedComments = append(annotatedComments, *cmt)
 			}
 		}
-	}
 
-	outputFile, err := os.OpenFile(outputFileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		fmt.Printf("Error opening output file %s: %s\n", outputFileName, err)
-		return
-	}
-	defer outputFile.Close()
+		if len(annotatedComments) > 0 {
+			mdSpec := NewMarkdownAPISpec(annotatedComments)
+			_, err = outputFile.WriteString(mdSpec.String() + "\n")
+			if err != nil {
+				fmt.Printf("Error writing to output file %s: %s\n", outputFileName, err)
+				return
+			}
 
-	if len(annotatedComments) > 0 {
-		mdSpec := NewMarkdownAPISpec(annotatedComments)
-		_, err = outputFile.WriteString(mdSpec.String() + "\n")
-		if err != nil {
-			fmt.Printf("Error writing to output file %s: %s\n", outputFileName, err)
-			return
+			annotatedComments = make([]SwagAnnotationComment, 0)
 		}
 	}
 
@@ -60,7 +62,7 @@ func ParseGoFile(filePath, outputFileName string) {
 }
 
 func hasSwaggerAnnotation(comment string) bool {
-	annotationRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Router)`
+	annotationRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Failure|Router)`
 
 	match, err := regexp.MatchString(annotationRegex, comment)
 	if err != nil {
@@ -72,7 +74,7 @@ func hasSwaggerAnnotation(comment string) bool {
 }
 
 func extractAnnotationComment(comment string) *SwagAnnotationComment {
-	textRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Router)[[:space:]]+(.*)`
+	textRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Failure|Router)[[:space:]]+(.*)`
 
 	r := regexp.MustCompile(textRegex)
 	match := r.FindStringSubmatch(comment)
