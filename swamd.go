@@ -129,13 +129,13 @@ func (m *MarkdownAPISpec) String() string {
 		markdown += fmt.Sprintf("|description|%s|\n", m.Description)
 	}
 	if len(m.Tags) > 0 {
-		markdown += fmt.Sprintf("|Tags|%s|\n", m.Tags)
+		markdown += fmt.Sprintf("|Tags|%s|\n", strings.Join(m.Tags, ", "))
 	}
 	if len(m.Accept) > 0 {
-		markdown += fmt.Sprintf("|Accept|%s|\n", m.Accept)
+		markdown += fmt.Sprintf("|Accept|%s|\n", strings.Join(m.Accept, ", "))
 	}
 	if len(m.Produce) > 0 {
-		markdown += fmt.Sprintf("|Produce|%s|\n", m.Produce)
+		markdown += fmt.Sprintf("|Produce|%s|\n", strings.Join(m.Produce, ", "))
 	}
 	if len(m.Params) > 0 {
 		markdown += "|Params"

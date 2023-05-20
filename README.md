@@ -27,12 +27,13 @@ From
 
 To
 
-| [POST]      | /courses                                                                 |
-| ----------- | ------------------------------------------------------------------------ |
-| summary     | Creates course                                                           |
-| description | create course                                                            |
-| Tags        | [courses]                                                                |
-| Accept      | [json]                                                                   |
-| Produce     | [plain/text]                                                             |
-| Params      | **request** body {CourseCreateRequest} required – "course create params" |
-| Responses   | **200** {string} string "Course unique identifier"                       |
+|[POST]|/courses|
+| --- | --- |
+|summary|Creates course|
+|description|create course|
+|Tags|courses|
+|Accept|json|
+|Produce|plain/text|
+|Params|**request** body {CourseCreateRequest} required – "course create params"|
+|Responses|**200** {string} string "Course unique identifier" |
+
