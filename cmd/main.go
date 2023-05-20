@@ -14,9 +14,8 @@ func main() {
 	targetPath := "."
 	outputFile := "api_spec.md"
 
-	flag.StringVarP(&targetPath, "p", "p", targetPath, "Target path to parse Go files from (default: .)")
-	flag.StringVarP(&outputFile, "o", "o", outputFile,
-		fmt.Sprintf("Output file to write API specifications to (default: %s)", outputFile))
+	flag.StringVarP(&targetPath, "p", "p", targetPath, "Target path to parse Go files from.")
+	flag.StringVarP(&outputFile, "o", "o", outputFile, "Output file to write API specifications to.")
 	flag.Parse()
 
 	if _, err := os.Stat(outputFile); err == nil {
