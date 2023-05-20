@@ -11,6 +11,8 @@ import (
 	"strings"
 )
 
+var annotationRegexTempl string = `Summary|Description|Tags|Accept|Produce|Param|Success|Failure|Router`
+
 func ParseGoFile(filePath, outputFileName string) {
 	inFile, err := os.OpenFile(filePath, os.O_RDONLY, 0755)
 	if err != nil {
@@ -62,7 +64,7 @@ func ParseGoFile(filePath, outputFileName string) {
 }
 
 func hasSwaggerAnnotation(comment string) bool {
-	annotationRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Failure|Router)`
+	annotationRegex := fmt.Sprintf(`@(%s)`, annotationRegexTempl)
 
 	match, err := regexp.MatchString(annotationRegex, comment)
 	if err != nil {
@@ -74,7 +76,7 @@ func hasSwaggerAnnotation(comment string) bool {
 }
 
 func extractAnnotationComment(comment string) *SwagAnnotationComment {
-	textRegex := `@(Summary|Description|Tags|Accept|Produce|Param|Success|Failure|Router)[[:space:]]+(.*)`
+	textRegex := fmt.Sprintf(`@(%s)[[:space:]]+(.*)`, annotationRegexTempl)
 
 	r := regexp.MustCompile(textRegex)
 	match := r.FindStringSubmatch(comment)
