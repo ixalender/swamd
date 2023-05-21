@@ -125,12 +125,12 @@ type MarkdownResponse struct {
 func (m *MarkdownAPISpec) String() string {
 	var markdown string
 	markdown += fmt.Sprintf("|%s|%s|\n", strings.ToUpper(m.Method), m.Path)
-	markdown += "| --- | --- |\n"
+	markdown += "| :--- | :--- |\n"
 	if m.Summary != "" {
-		markdown += fmt.Sprintf("|summary|%s|\n", m.Summary)
+		markdown += fmt.Sprintf("|Summary|%s|\n", m.Summary)
 	}
 	if m.Description != "" {
-		markdown += fmt.Sprintf("|description|%s|\n", m.Description)
+		markdown += fmt.Sprintf("|Description|%s|\n", m.Description)
 	}
 	if len(m.Tags) > 0 {
 		markdown += fmt.Sprintf("|Tags|%s|\n", strings.Join(m.Tags, ", "))
